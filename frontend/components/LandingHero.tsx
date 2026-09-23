@@ -9,6 +9,7 @@ export default function LandingHero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     // Trigger smooth entrance flow
@@ -29,6 +30,7 @@ export default function LandingHero() {
   };
 
   const handleDemoAccess = () => {
+    setIsMobileNavOpen(false);
     localStorage.setItem(
       "vendoros_user",
       JSON.stringify({
@@ -192,7 +194,8 @@ export default function LandingHero() {
           <span className="nav-spec-text">Global Procurement Cloud</span>
         </nav>
 
-        <div className="nav-actions">
+        {/* Desktop Action Buttons */}
+        <div className="nav-actions desktop-only">
           <Link href="/auth" className="nav-link-btn">
             Sign In
           </Link>
@@ -204,6 +207,80 @@ export default function LandingHero() {
             </svg>
           </Link>
         </div>
+
+        {/* Mobile Hamburger Toggle Button */}
+        <button
+          type="button"
+          className="landing-hamburger-btn mobile-only"
+          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={isMobileNavOpen}
+        >
+          {isMobileNavOpen ? (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile Slide-Down Menu */}
+        {isMobileNavOpen && (
+          <div className="landing-mobile-dropdown">
+            <div className="mobile-dropdown-header">
+              <span className="system-status-indicator">
+                <span className="status-dot-pulse" />
+                System Operational · Cloud Active
+              </span>
+            </div>
+
+            <div className="mobile-dropdown-links">
+              <Link
+                href="/dashboard"
+                className="mobile-nav-primary-link"
+                onClick={() => setIsMobileNavOpen(false)}
+              >
+                <span>Launch Console</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleDemoAccess}
+                className="mobile-nav-demo-link"
+              >
+                <span className="cta-icon-play">▶</span>
+                <span>1-Click Live Demo</span>
+              </button>
+
+              <div className="mobile-dropdown-row">
+                <Link
+                  href="/auth"
+                  className="mobile-nav-sublink"
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth"
+                  className="mobile-nav-sublink highlight"
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Single-Section Hero Centerpiece */}
