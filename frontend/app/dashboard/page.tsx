@@ -138,8 +138,14 @@ interface ProductWithInventory {
 }
 
 function getApiBase(): string {
-  const raw = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").trim().replace(/\/+$/, "");
-  return raw.endsWith("/api") ? raw : `${raw}/api`;
+  if (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL.trim() !== "") {
+    const raw = process.env.NEXT_PUBLIC_API_URL.trim().replace(/\/+$/, "");
+    return raw.endsWith("/api") ? raw : `${raw}/api`;
+  }
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+    return "/api";
+  }
+  return "http://localhost:8080/api";
 }
 
 const API_BASE = getApiBase();
